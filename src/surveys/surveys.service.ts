@@ -20,7 +20,7 @@ export class SurveysService {
         let centerMarkPhoto: string | null = null;
 
         try {
-            // Загрузка фотографий
+            
             if (files?.exteriorPhoto?.[0]) {
                 exteriorPhoto = await this.yandexStorageService.uploadFile(files.exteriorPhoto[0]);
             }
@@ -29,14 +29,12 @@ export class SurveysService {
                 centerMarkPhoto = await this.yandexStorageService.uploadFile(files.centerMarkPhoto[0]);
             }
 
-            // Создание записи в базе данных
             const survey = await this.surveyRepository.create({
                 ...dto,
                 exteriorPhoto,
                 centerMarkPhoto
             } as unknown as CreationAttributes<Survey>);
 
-            // Создание маркера
             await this.markersService.createMarker({
                 coordinates: dto.coordinates,
                 title: dto.markerName,
@@ -46,7 +44,6 @@ export class SurveysService {
 
             return survey;
         } catch (error) {
-            // В случае ошибки удаляем загруженные файлы
             if (exteriorPhoto) {
                 try {
                     await this.yandexStorageService.deleteFile(exteriorPhoto);
@@ -127,7 +124,6 @@ export class SurveysService {
             let exteriorPhoto: string | null = survey.exteriorPhoto;
             let centerMarkPhoto: string | null = survey.centerMarkPhoto;
 
-            // Обновление фотографий
             if (files.exteriorPhoto?.[0]) {
                 if (exteriorPhoto) {
                     try {
@@ -150,7 +146,6 @@ export class SurveysService {
                 centerMarkPhoto = await this.yandexStorageService.uploadFile(files.centerMarkPhoto[0]);
             }
 
-            // Обновление записи в базе данных
             await survey.update({
                 ...dto,
                 exteriorPhoto,
@@ -171,7 +166,7 @@ export class SurveysService {
                 throw new BadRequestException('Карточка обследования не найдена');
             }
 
-            // Удаление фотографий из хранилища
+            
             if (survey.exteriorPhoto) {
                 try {
                     await this.yandexStorageService.deleteFile(survey.exteriorPhoto);

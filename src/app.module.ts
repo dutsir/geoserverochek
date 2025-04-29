@@ -29,30 +29,30 @@ import { VisitsModule } from './visits/visits.module';
         ConfigModule.forRoot({
             isGlobal: true,
             load: [configuration],
-        }),
+         }),
         SequelizeModule.forRootAsync({
             imports: [ConfigModule],
             useFactory: (configService: ConfigService) => ({
-              dialect: 'postgres',
+            dialect: 'postgres',
               host: configService.get('DB_HOST'), 
               port: configService.get('DB_PORT'),
               username: configService.get('DB_USER'),
               password: configService.get('DB_PASSWORD'),
               database: configService.get('DB_NAME'),
-              models: [User, Role, UserRoles],
+            models: [User, Role, UserRoles],
               autoLoadModels: true,
-              ssl: true, 
-              dialectOptions: {
+              ssl: configService.get('DB_SSL') === 'true',
+              dialectOptions: configService.get('DB_SSL') === 'true' ? {
                 ssl: {
-                  require: true, 
-                  rejectUnauthorized: false 
+                  require: true,
+                  rejectUnauthorized: false
                 }
-              },
+              } : {},
               synchronize: false, 
               alter: false 
             }),
             inject: [ConfigService],
-          }),
+        }),
         UsersModule,
         RolesModule,
         AuthModule,
