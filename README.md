@@ -65,10 +65,7 @@ YANDEX_REGION=ru-central1
 YANDEX_BUCKET_NAME=your_bucket
 YANDEX_ENDPOINT=https://storage.yandexcloud.net
 
-# Cloudinary
-CLOUDINARY_CLOUD_NAME=your_cloud_name
-CLOUDINARY_API_KEY=your_api_key
-CLOUDINARY_API_SECRET=your_api_secret
+
 ```
 
 ### Запуск в режиме разработки
@@ -107,5 +104,3 @@ docker build -t geoserver .
 docker run -p 3000:3000 geoserver
 ```
 
-## Лицензия
-UNLICENSED
