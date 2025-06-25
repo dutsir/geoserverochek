@@ -58,22 +58,36 @@ report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
 
 
-# Uploads and media
+
 /uploads
 /public/uploads
+/config
 
-# Cache
 .cache
 .npm
 .eslintcache
 
-# TypeScript
+
 *.tsbuildinfo
 
-# Misc
+
 .DS_Store
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
 geoserver_backup.sql
+.env
+.development.env
+backup.sh
+deploy.sh
+migrate.sh
+ecosystem.config.js
+start.bat
+surveyCardTemplate.docx
+test_connection.js
+.production.env
+.vscode/
+restore.sh
+config.json
+migra

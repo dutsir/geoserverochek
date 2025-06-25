@@ -36,22 +36,31 @@ module.exports = {
       }
     });
 
-    // Copy data from old table to new table
+
+    await queryInterface.sequelize.query(`
+      DO $$ BEGIN
+        CREATE TYPE "enum_markers_new_status" AS ENUM ('intact', 'damaged', 'needs_inspection');
+      EXCEPTION
+        WHEN duplicate_object THEN null;
+      END $$;
+    `);
+
+
     await queryInterface.sequelize.query(`
       INSERT INTO markers_new (id, coordinates, title, description, status, "createdAt", "updatedAt")
-      SELECT id, coordinates::text, title, description, status, "createdAt", "updatedAt"
+      SELECT id, coordinates::text, title, description, status::text::"enum_markers_new_status", "createdAt", "updatedAt"
       FROM markers;
     `);
 
-    // Drop old table
+  
     await queryInterface.dropTable('markers');
 
-    // Rename new table to original name
+
     await queryInterface.renameTable('markers_new', 'markers');
   },
 
   async down(queryInterface, Sequelize) {
-    // In case of rollback, we'll recreate the original table structure
+
     await queryInterface.createTable('markers_old', {
       id: {
         type: Sequelize.UUID,
@@ -85,17 +94,17 @@ module.exports = {
       }
     });
 
-    // Copy data back
+
     await queryInterface.sequelize.query(`
       INSERT INTO markers_old (id, coordinates, title, description, status, "createdAt", "updatedAt")
       SELECT id, string_to_array(coordinates, ',')::float[], title, description, status, "createdAt", "updatedAt"
       FROM markers;
     `);
 
-    // Drop new table
+
     await queryInterface.dropTable('markers');
 
-    // Rename old table back to original name
+  
     await queryInterface.renameTable('markers_old', 'markers');
   }
 }; 

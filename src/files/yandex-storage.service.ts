@@ -8,9 +8,9 @@ export class YandexStorageService {
     private bucketName: string;
 
     constructor(private configService: ConfigService) {
-        const accessKeyId = this.configService.get<string>('yandexStorage.accessKeyId');
-        const secretAccessKey = this.configService.get<string>('yandexStorage.secretAccessKey');
-        this.bucketName = this.configService.get<string>('yandexStorage.bucketName') || '';
+        const accessKeyId = this.configService.get<string>('YANDEX_ACCESS_KEY_ID');
+        const secretAccessKey = this.configService.get<string>('YANDEX_SECRET_ACCESS_KEY');
+        this.bucketName = this.configService.get<string>('YANDEX_BUCKET_NAME') || '';
 
         if (!accessKeyId || !secretAccessKey || !this.bucketName) {
             throw new Error('Yandex Storage credentials are not properly configured');
